@@ -12,8 +12,6 @@ type Database struct {
 	mu        sync.RWMutex
 }
 
-var GlobalDB *Database
-
 // NewDatabase initializes a new instance of the in-memory database
 func NewDatabase() *Database {
 	return &Database{
@@ -23,35 +21,35 @@ func NewDatabase() *Database {
 }
 
 // Set inserts or updates a key-value pair in the database
-func (db *Database) AddUser(user models.User) {
+func (db *Database) AddUser(user *models.User) {
 	db.mu.Lock()
 	defer db.mu.Unlock()
-	db.users[user.ID] = user
+	db.users[user.Email] = *user
 }
 
 // Get retrieves the value for a given key from the database
-func (db *Database) GetUser(userID string) (models.User, bool) {
+func (db *Database) GetUser(userID string) (*models.User, bool) {
 	db.mu.RLock()
 	defer db.mu.RUnlock()
 	user, ok := db.users[userID]
-	return user, ok
+	return &user, ok
 }
 
 // Update retrieves the value for a given key from the database
-func (db *Database) UpdateUser(user models.User, id string) {
-	db.mu.RLock()
-	defer db.mu.RUnlock()
-	db.users[id] = user
+func (db *Database) UpdateUser(user *models.User, id string) {
+	db.mu.Lock()
+	defer db.mu.Unlock()
+	db.users[id] = *user
 }
 
-func (db *Database) ListUsers() []models.User {
-	db.mu.RLock()
-	defer db.mu.RUnlock()
+func (db *Database) ListUsers() *[]models.User {
+	db.mu.Lock()
+	defer db.mu.Unlock()
 	var users []models.User
 	for _, value := range db.users {
 		users = append(users, value)
 	}
-	return users
+	return &users
 }
 
 // Delete removes a key-value pair from the database
@@ -62,35 +60,35 @@ func (db *Database) DeleteUser(userID string) {
 }
 
 // Set inserts or updates a key-value pair in the database
-func (db *Database) AddQuestion(question models.Question) {
+func (db *Database) AddQuestion(question *models.Question) {
 	db.mu.Lock()
 	defer db.mu.Unlock()
-	db.questions[question.ID] = question
+	db.questions[question.ID] = *question
 }
 
 // Get retrieves the value for a given key from the database
-func (db *Database) GetQuestion(questionID int) (models.Question, bool) {
+func (db *Database) GetQuestion(questionID int) (*models.Question, bool) {
 	db.mu.RLock()
 	defer db.mu.RUnlock()
 	question, ok := db.questions[questionID]
-	return question, ok
+	return &question, ok
 }
 
-func (db *Database) ListQuestions() []models.Question {
-	db.mu.RLock()
-	defer db.mu.RUnlock()
+func (db *Database) ListQuestions() *[]models.Question {
+	db.mu.Lock()
+	defer db.mu.Unlock()
 	var questions []models.Question
 	for _, value := range db.questions {
 		questions = append(questions, value)
 	}
-	return questions
+	return &questions
 }
 
 // Get retrieves the value for a given key from the database
-func (db *Database) UpdateQuestion(question models.Question, id int) {
-	db.mu.RLock()
-	defer db.mu.RUnlock()
-	db.questions[id] = question
+func (db *Database) UpdateQuestion(question *models.Question, id int) {
+	db.mu.Lock()
+	defer db.mu.Unlock()
+	db.questions[id] = *question
 }
 
 // Delete removes a key-value pair from the database

@@ -13,8 +13,8 @@ import (
 
 func main() {
 	loadEnv()
-	loadDatabase()
-	serveApp()
+	db := loadDatabase()
+	serveApp(db)
 }
 
 func loadEnv() {
@@ -25,28 +25,29 @@ func loadEnv() {
 	log.Println(".env file loaded successfully")
 }
 
-func loadDatabase() {
-	db.GlobalDB = db.NewDatabase()
-	initializeValues()
+func loadDatabase() *db.Database {
+	globalDb := db.NewDatabase()
+	initializeValues(globalDb)
+	return globalDb
 }
 
-func initializeValues() {
-	user := models.User{}
+func initializeValues(db *db.Database) {
+	user := &models.User{}
 	user.HashPassword(os.Getenv("ADMIN_PASSWORD"))
-	user.ID = os.Getenv("ADMIN_EMAIL")
+	user.Email = os.Getenv("ADMIN_EMAIL")
 	user.RoleID = 1
-	db.GlobalDB.AddUser(user)
+	db.AddUser(user)
 
-	question := models.Question{}
+	question := &models.Question{}
 	question.ID = 1
-	question.Question = "Which is a capital city of quiz/quiz?"
+	question.Question = "Which is a capital city of Malta?"
 	question.Answers = []string{"Valletta", "Birgu", "Mdina"}
 	question.Answer = 1
-	db.GlobalDB.AddQuestion(question)
+	db.AddQuestion(question)
 }
 
-func serveApp() {
-	quiz := service.New()
+func serveApp(db *db.Database) {
+	quiz := service.New(db)
 
 	restEngine := server.New(quiz)
 	restEngine.Run(":8080")
