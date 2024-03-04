@@ -10,7 +10,7 @@ import (
 func (c *QuizController) UpdateUser(ctx *gin.Context) {
 	user := &models.User{}
 
-	userID := ctx.Param("email")
+	userID := ctx.Param("id")
 	err := ctx.ShouldBindJSON(&user)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid data"})

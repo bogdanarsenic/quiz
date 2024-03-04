@@ -3,13 +3,16 @@ package rest
 import (
 	definition "quiz/quiz/services/definition"
 
+	validators "quiz/quiz/models/validators"
+
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 )
 
 type QuizController struct {
 	service definition.Quiz
 
-	// validator binding.StructValidator
+	validator binding.StructValidator
 }
 
 func NewQuizController(
@@ -17,14 +20,17 @@ func NewQuizController(
 	router *gin.RouterGroup,
 ) *QuizController {
 	c := &QuizController{
-		service: service,
-		// validator: validators.NewValidator(),
+		service:   service,
+		validator: validators.NewValidator(),
 	}
 
 	// // Questions
 	router.GET("/questions", c.ListQuestions)
 	router.GET("/questions/:id", c.GetQuestion)
+	router.GET("/users", c.ListUsers)
+	router.GET("/users/:id", c.GetUser)
 
+	router.POST("/logout", c.Logout)
 	return c
 }
 
@@ -33,7 +39,8 @@ func NewAdminController(
 	router *gin.RouterGroup,
 ) *QuizController {
 	c := &QuizController{
-		service: service,
+		service:   service,
+		validator: validators.NewValidator(),
 	}
 
 	//questions
@@ -49,6 +56,8 @@ func NewAdminController(
 	router.GET("/users/:id", c.GetUser)
 	router.PATCH("/users/:id", c.UpdateUser)
 	router.DELETE("/users/:id", c.DeleteUser)
+
+	router.POST("/logout", c.Logout)
 	return c
 }
 
@@ -57,7 +66,8 @@ func NewRegisterController(
 	router *gin.RouterGroup,
 ) *QuizController {
 	c := &QuizController{
-		service: service,
+		service:   service,
+		validator: validators.NewValidator(),
 	}
 
 	router.POST("/login", c.Login)

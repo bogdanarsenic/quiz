@@ -15,7 +15,7 @@ func (q *QuizApp) UpdateQuestion(ctx *gin.Context, questionID int, req *models.Q
 		return nil, errors.New("There is no question with this ID!")
 	}
 
-	if req.Answer != question.Answer && req.Answer != 0 {
+	if req.Answer != question.Answer && req.Answer != "" {
 		question.Answer = req.Answer
 	}
 	if req.ID != question.ID && req.ID != 0 {

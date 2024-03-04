@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"quiz/quiz/models"
 
+	errors "quiz/quiz/errors"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,9 +15,12 @@ func (c *QuizController) Login(ctx *gin.Context) {
 
 	// Check user credentials and generate a JWT token
 	if err := ctx.ShouldBindJSON(&user); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid data"})
+		err := errors.NewErrorWrapper(http.StatusBadRequest, err, "Invalid Data")
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
+
+	c.validator.ValidateStruct(&user)
 
 	token, err := c.service.Login(ctx, user)
 
@@ -25,4 +30,8 @@ func (c *QuizController) Login(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"token": token, "username": user.Email, "message": "Successfully logged in"})
+}
+
+func (c *QuizController) Logout(ctx *gin.Context) {
+	ctx.Redirect(http.StatusMovedPermanently, "/login")
 }

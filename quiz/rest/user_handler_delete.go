@@ -7,7 +7,7 @@ import (
 )
 
 func (c *QuizController) DeleteUser(ctx *gin.Context) {
-	userID := ctx.Param("email")
+	userID := ctx.Param("id")
 	_, err := c.service.DeleteUser(ctx, userID)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err})

@@ -91,3 +91,13 @@ func getTokenFromRequest(context *gin.Context) string {
 	}
 	return ""
 }
+
+func Logout(user *models.User) (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"id":   user.Email,
+		"role": user.RoleID,
+		"iat":  time.Now().Unix(),
+		"eat":  time.Now().Add(-time.Hour), //Sets the expiry time an hour ago in the past.
+	})
+	return token.SignedString(privateKey)
+}

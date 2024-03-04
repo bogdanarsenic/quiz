@@ -8,7 +8,7 @@ import (
 )
 
 func (c *QuizController) CreateQuestion(ctx *gin.Context) {
-	req := &models.Question{}
+	req := &models.CreateQuestionRequest{}
 
 	err := ctx.ShouldBindJSON(&req)
 

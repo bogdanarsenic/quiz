@@ -9,7 +9,7 @@ import (
 type Quiz interface {
 	ListQuestions(c *gin.Context) (*[]models.Question, error)
 	GetQuestion(c *gin.Context, questionID int) (*models.Question, error)
-	CreateQuestion(c *gin.Context, req *models.Question) (*models.Question, error)
+	CreateQuestion(c *gin.Context, req *models.CreateQuestionRequest) (*models.Question, error)
 	UpdateQuestion(c *gin.Context, questionID int, req *models.Question) (*models.Question, error)
 	DeleteQuestion(c *gin.Context, questionID int) (*models.Question, error)
 

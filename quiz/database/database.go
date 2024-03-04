@@ -47,7 +47,9 @@ func (db *Database) ListUsers() *[]models.User {
 	defer db.mu.Unlock()
 	var users []models.User
 	for _, value := range db.users {
-		users = append(users, value)
+		if value.RoleID == 2 {
+			users = append(users, value)
+		}
 	}
 	return &users
 }
