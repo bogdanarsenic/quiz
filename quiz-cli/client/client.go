@@ -25,6 +25,7 @@ type Config struct {
 	MethodPost   string
 	MethodPatch  string
 	MethodDelete string
+	Token        string
 }
 
 // QuizClient provides Quiz operations over HTTP

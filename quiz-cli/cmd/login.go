@@ -8,7 +8,12 @@ import (
 var loginCmd = &cobra.Command{
 	Use:   "login",
 	Short: "commands to login new users",
-	Long:  `The root command for GET requests`,
+	Long:  `command for logging into the service to try quiz`,
+	Run:   loginRequest,
+}
+
+func loginRequest(cmd *cobra.Command, args []string) {
+
 }
 
 func init() {

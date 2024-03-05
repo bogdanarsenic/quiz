@@ -1,0 +1,32 @@
+[
+        {
+           "id": 1,
+           "question": "Which is a capital city of Malta?",
+           "answers":["Valletta","Birgu","Mdina"],
+           "answer":"Valletta"
+       },
+       {
+        "id": 2,
+        "question": "Which planet is the closest to sun?",
+        "answers":["Saturn", "Mercury", "Venus"],
+        "answer":"Mercury"
+         },
+         {
+            "id": 3,
+            "question": "How many timezones Russia have?",
+            "answers":["10", "12", "15"],
+            "answer":"12"
+         },
+         {
+            "id": 4,
+            "question": "Who won Wimbledon 2011?",
+            "answers":["Rafael Nadal", "Roger Federer", "Novak Djokovic"],
+            "answer":"Novak Djokovic"
+         },
+         {
+            "id": 5,
+            "question": "What is the largest continent?",
+            "answers":["Asia", "Europe", "North America"],
+            "answer":"Asia"
+         }
+   ]

@@ -3,11 +3,11 @@ package client
 import (
 	"encoding/json"
 	"fmt"
-	"quiz/quiz-cli/structs"
+	models "quiz/quiz-cli/structs"
 )
 
 // GetQuestion Retrieve a question
-func (q *QuizClient) GetQuestion(id string) (*structs.GetQuestion, error) {
+func (q *QuizClient) GetQuestion(id string) (*models.GetQuestion, error) {
 
 	questionURL, err := q.getQuestionURL(id)
 	if err != nil {
@@ -19,7 +19,7 @@ func (q *QuizClient) GetQuestion(id string) (*structs.GetQuestion, error) {
 		return nil, fmt.Errorf("error in response: %s", err)
 	}
 
-	result := &structs.GetQuestion{}
+	result := &models.GetQuestion{}
 
 	err = json.Unmarshal(resp, result)
 	if err != nil {
@@ -29,8 +29,7 @@ func (q *QuizClient) GetQuestion(id string) (*structs.GetQuestion, error) {
 	return result, nil
 }
 
-// GetShareTarget retrieve a share target
-func (f *QuizClient) GetUser(shareID string) (*structs.User, error) {
+func (f *QuizClient) GetUser(shareID string) (*models.User, error) {
 
 	userURL, err := f.getUserURL(shareID)
 	if err != nil {
@@ -42,7 +41,7 @@ func (f *QuizClient) GetUser(shareID string) (*structs.User, error) {
 		return nil, fmt.Errorf("error in response: %s", err)
 	}
 
-	result := &structs.User{}
+	result := &models.User{}
 	err = json.Unmarshal(resp, result)
 	if err != nil {
 		return nil, fmt.Errorf("eror reading response body: %s", err)

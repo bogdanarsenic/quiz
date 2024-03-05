@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
-	"quiz/quiz-cli/structs"
+	"quiz/quiz/models"
 )
 
-func (q *QuizClient) Login(user structs.CreateUserRequest) (string, error) {
+func (q *QuizClient) Login(user models.CreateUserRequest) (string, error) {
 
 	// questionURL, err := q.getQuestionURL(id)
 	// if err != nil {

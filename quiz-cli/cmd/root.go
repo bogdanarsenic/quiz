@@ -7,26 +7,14 @@ import (
 	"fmt"
 	"os"
 	"quiz/quiz-cli/client"
+	"quiz/quiz-cli/flags"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var (
 	QuizClient *client.QuizClient
-)
-
-const (
-	BaseUrlPath       = "http://localhost:8080"
-	QuestionPath      = "/questions/"
-	UserPath          = "/users/"
-	AdminUserPath     = "/admin/users/"
-	AdminQuestionPath = "/admin/questions/"
-	LoginPath         = "/login/"
-	RegisterPath      = "/register/"
-	MethodGet         = "GET"
-	MethodPost        = "POST"
-	MethodPatch       = "PATCH"
-	MethodDelete      = "DELETE"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -35,6 +23,12 @@ var rootCmd = &cobra.Command{
 	Short: "Quiz servise",
 	Long:  `Command line tools for REST requests to Quiz service`,
 }
+
+type rootFlagsConfig struct {
+	rootToken string
+}
+
+var RootFlags = rootFlagsConfig{}
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
@@ -48,6 +42,7 @@ func Execute() {
 func clientConfig() *client.Config {
 	return &client.Config{
 		BasePath:     BaseUrlPath,
+		Token:        viper.GetString(tokenFlag),
 		QuestionPath: QuestionPath,
 		UserPath:     UserPath,
 		LoginPath:    LoginPath,
@@ -73,6 +68,8 @@ func initClient() {
 func init() {
 	cobra.OnInitialize(initClient)
 
+	rootCmd.PersistentFlags().StringVarP(&RootFlags.rootToken, tokenFlag, "t", "", "bearer token for auth")
+	_ = rootCmd.MarkPersistentFlagRequired("token")
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
@@ -81,5 +78,6 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	// flags.BindCommonFlags(rootCmd)
+	flags.BindPFlag(rootCmd, tokenFlag)
+	flags.BindCommonFlags(rootCmd)
 }

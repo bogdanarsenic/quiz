@@ -17,7 +17,7 @@ var listUsersCmd = &cobra.Command{
 
 func listUserRequest(cmd *cobra.Command, args []string) {
 	resp, err := QuizClient.ListUsers()
-	if err != nil {
+	if err != nil || resp == nil {
 		_, _ = fmt.Fprint(cmd.ErrOrStderr(), fmt.Sprintf("error getting users - %s", err))
 		return
 	}

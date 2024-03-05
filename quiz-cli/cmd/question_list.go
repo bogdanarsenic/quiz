@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"quiz/quiz-cli/structs"
+	models "quiz/quiz-cli/structs"
 
 	"github.com/manifoldco/promptui"
 	prompt "github.com/manifoldco/promptui"
@@ -19,12 +19,7 @@ var listQuestionsCmd = &cobra.Command{
 	Run:          listQuestionRequest,
 }
 
-type promptContent struct {
-	errorMsg string
-	label    string
-}
-
-func promptGetSelect(pc promptContent, question structs.Question, score *int) {
+func promptGetSelect(pc models.PromptContent, question models.Question, score *int) {
 
 	items := []string{}
 
@@ -40,7 +35,7 @@ func promptGetSelect(pc promptContent, question structs.Question, score *int) {
 
 	for index < 0 {
 		prompt := promptui.Select{
-			Label:     pc.label,
+			Label:     pc.Label,
 			Items:     question.Answers,
 			Templates: templates,
 		}
@@ -64,17 +59,16 @@ func promptGetSelect(pc promptContent, question structs.Question, score *int) {
 func listQuestionRequest(cmd *cobra.Command, args []string) {
 
 	resp, err := QuizClient.ListQuestions()
-	if err != nil {
-		_, _ = fmt.Fprint(cmd.ErrOrStderr(), fmt.Sprintf("error getting share with id %s, %s", args[0], err))
+	if err != nil || *resp == nil {
+		_, _ = fmt.Fprint(cmd.ErrOrStderr(), fmt.Sprintf("Unauthorized error!"))
 		return
 	}
 	score := 0
 
 	for _, q := range *resp {
-
-		catPromptContent := promptContent{
-			"Please answer the question",
-			fmt.Sprintf("%d) %s", q.ID, q.Question),
+		catPromptContent := models.PromptContent{
+			ErrorMsg: "Please answer the question",
+			Label:    fmt.Sprintf("%d) %s", q.ID, q.Question),
 		}
 
 		promptGetSelect(catPromptContent, q, &score)
@@ -110,7 +104,7 @@ func listQuestionRequest(cmd *cobra.Command, args []string) {
 
 	percent := 100.0 * numbersOfUsers / peopleWhoTookQuiz
 
-	fmt.Printf("You are better then %2.f%% of users\n", percent)
+	fmt.Printf("You are better then %.2f%% of users\n", percent)
 }
 
 func init() {
